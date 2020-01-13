@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>SSO</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+<h1>Implicit Flow</h1>
+<button id="b1">Get User Info</button>
+<button id="b2">Say Hello</button>
+<button id="g1">Get User Groups</button>
+<button id="l1">Logout</button>
+<hr>
+<h1>Client Credentials</h1>
+<button id="b3">Get Token</button>
+<button id="b4">Get User Info</button>
+<button id="b5">Say Hello</button>
+<hr>
+<div id="msg"></div>
+<script>
+
+var getToken = function(){
+	var url = String(window.location.hash).substring(1);
+	console.log(url);
+	var access_token;
+	if(typeof url == "undefined"){
+		//do nothing
+	}else{
+		var url_hash = url.split("&");
+		console.log(url_hash);
+		console.log(url_hash[1]);
+		if(typeof url_hash !== "undefined")
+			if(typeof url_hash[1] !== "undefined")
+				access_token = url_hash[1].split("=")[1];
+		console.log("Access Token: " + access_token);
+	}
+	return access_token;
+}
+
+$('#b1').click(function(){	        
+	callApi("/api/userinfo",getToken());                            
+});
+
+$('#b2').click(function(){
+	callApi("/api/hello",getToken()); 
+});
+
+$('#g1').click(function(){
+	callApi("/api/groups",getToken()); 
+});
+
+$('#l1').click(function(){
+	callApi("/api/logout",getToken()); 
+	window.location.replace("https://auth.login.run-np.homedepot.com/logout.do?client_id=23417740-b839-4e40-b563-99326215d0eb&redirect_uri=" + window.location);
+});
+
+var callApi = function(url, token){
+	$.ajax({
+        type: "GET",
+        beforeSend: function(request) {
+          request.setRequestHeader("Authorization", "Bearer " + token);
+        },
+        url: url,                    
+        success: function(msg) {
+        	dia(JSON.stringify(msg));
+        },
+        error: function(msg){
+        	console.log(JSON.stringify(msg));
+        	window.location.replace("https://auth.login.run-np.homedepot.com/oauth/authorize?response_type=token&grant_type=implicit&client_id=23417740-b839-4e40-b563-99326215d0eb&redirect_uri=" + window.location);        	
+        }
+      });
+}
+
+var token;
+
+$('#b3').click(function(){
+	$.get("/gettoken",function(msg){
+		token = msg;		
+		dia(msg);
+	});
+});
+
+$('#b4').click(function(){	        
+	callApi("/api/userinfo",token);                            
+});
+
+$('#b5').click(function(){
+	callApi("/api/hello",token); 
+});
+
+var dia = function(msg) {   
+    $("#msg").html("<h4>"+msg+"</h4>");
+    /**$("#msg").dialog({
+        modal: true,
+        buttons: {
+            Ok: function() {
+              $( this ).dialog( "close" );
+            }
+          }
+    });*/
+};
+
+
+</script>
+<a href="swagger-ui.html"><h3>Swagger-UI</h3></a>
+<h3>Source code</h3>
+<a href="https://github.homedepot.com/vfauzdar/AuthCode">https://github.homedepot.com/vfauzdar/AuthCode</a>
+</body>
+</html>

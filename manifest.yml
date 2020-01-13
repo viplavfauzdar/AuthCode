@@ -1,0 +1,9 @@
+---
+applications:
+- name: implicitflowdemo
+  host: implicitflowdemo
+  path: target/AuthCode-0.0.1-SNAPSHOT.war
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git#v4.0
+  memory: 1024MB
+  disk_quota: 512MB
+  instances: 1  
