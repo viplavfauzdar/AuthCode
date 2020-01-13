@@ -10,39 +10,6 @@
 
 	<name>AuthCode</name>
 	<description>Demo project for Spring Boot</description>
-	
-	<repositories>
-        <repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>central</id>
-          <name>libs-release</name>
-          <url>https://maven.artifactory.homedepot.com/artifactory/libs-release</url>
-        </repository>
-        <repository>
-          <snapshots />
-          <id>snapshots</id>
-          <name>libs-snapshot</name>
-          <url>https://maven.artifactory.homedepot.com/artifactory/libs-snapshot</url>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>central</id>
-          <name>plugins-release</name>
-          <url>https://maven.artifactory.homedepot.com/artifactory/plugins-release</url>
-        </pluginRepository>
-        <pluginRepository>
-          <snapshots />
-          <id>snapshots</id>
-          <name>plugins-snapshot</name>
-          <url>https://maven.artifactory.homedepot.com/artifactory/plugins-snapshot</url>
-        </pluginRepository>
-      </pluginRepositories>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
